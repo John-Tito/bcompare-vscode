@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.0.8
+
+- Fixed the issue where Beyond Compare could not be opened when installing the portable version on Windows. Now you can add the path of bcomp.exe to your environment variables to normally use this extension.
+
 ## 1.0.7
 
 - Fixed launching Beyond Compare on Linux
@@ -47,4 +51,3 @@
 ## 1.0.0
 
 - Initial release
-

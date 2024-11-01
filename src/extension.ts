@@ -52,14 +52,14 @@ export function activate(context: vscode.ExtensionContext) {
 	globalState = context.globalState;
 
 	readLeftPath();
-	
-	vscode.window.onDidChangeWindowState(state => { 
 
-		if (state.focused) 
-		{ 
+	vscode.window.onDidChangeWindowState(state => {
+
+		if (state.focused)
+		{
 			readLeftPath();
 		}
-	}); 
+	});
 
 	// vscode.window.tabGroups.onDidChangeTabs(event => {
 	// 	if(event.opened.length >= 1 && vscode.workspace.getConfiguration("bcompare-vscode").skipDefaultCompareTool)
@@ -68,7 +68,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// 			try //Try-catch in case another extension messes with things first
 	// 			{
 	// 				if(tab.input instanceof vscode.TabInputTextDiff)
-	// 				{	
+	// 				{
 	// 					openFromDiffHelper(tab.input);
 	// 					vscode.window.tabGroups.close(tab);
 	// 				}
@@ -116,7 +116,7 @@ export function activate(context: vscode.ExtensionContext) {
 				success = true;
 				leftFileName = a.fsPath;
 			}
-			
+
 		}else if(!vscode.window.activeTextEditor)
 		{
 			//Error no active text editor
@@ -142,12 +142,12 @@ export function activate(context: vscode.ExtensionContext) {
 			success = true;
 			leftFileName = vscode.window.activeTextEditor.document.fileName;
 		}
-		
+
 		if(success)
 		{
 			vscode.commands.executeCommand('setContext', extensionName + '.leftSelected', true);
 			vscode.commands.executeCommand('setContext', extensionName + '.leftFolderSelected', false);
-			
+
 			vscode.window.showInformationMessage("Marked \"" + leftFileName + "\" as left file");
 		}
 	}
@@ -187,7 +187,7 @@ export function activate(context: vscode.ExtensionContext) {
 				rightLabel = a.fsPath;
 				blnRRO = true;
 			}
-			
+
 		}else if(!vscode.window.activeTextEditor)
 		{
 			//Error no active text editor
@@ -196,8 +196,8 @@ export function activate(context: vscode.ExtensionContext) {
 		{
 			//Error untitled
 			vscode.window.showErrorMessage(
-				"Error: Can not compare to " + 
-				vscode.window.activeTextEditor.document.fileName + 
+				"Error: Can not compare to " +
+				vscode.window.activeTextEditor.document.fileName +
 				" until it is saved");
 		}else if(vscode.window.activeTextEditor.document.uri.scheme === "file")
 		{
@@ -226,7 +226,7 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	}
 
-	registerCommand('.selectLeftFolder', (a) => 
+	registerCommand('.selectLeftFolder', (a) =>
 	{
 		if(a)
 		{
@@ -276,7 +276,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	function compareWithFile(a : any)
 	{
-		let options = 
+		let options =
 		{
 			canSelectFolders: false,
 			canSelectFiles: true,
@@ -323,7 +323,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	registerCommand('.compareWithFolder', (a) =>
 	{
-		let options = 
+		let options =
 		{
 			canSelectFolders: true,
 			canSelectFiles: false,
@@ -376,23 +376,23 @@ export function activate(context: vscode.ExtensionContext) {
 		{
 			//Error untitled
 			vscode.window.showErrorMessage(
-				"Error: Can not compare to " + 
-				vscode.window.activeTextEditor.document.fileName + 
+				"Error: Can not compare to " +
+				vscode.window.activeTextEditor.document.fileName +
 				" until it is saved");
 		}else
 		{
 			fullPath = vscode.window.activeTextEditor.document.fileName;
 			success = true;
 		}
-		
-		
+
+
 
 		if(!success)
 		{
 			return;
 		}
-		
-		let options = 
+
+		let options =
 		{
 			canSelectFolders: true,
 			canSelectFiles: false,
@@ -411,7 +411,7 @@ export function activate(context: vscode.ExtensionContext) {
 			var splitPath;
 
 			splitPath = path.split("\\");
-			
+
 			let folderPath = splitPath[0];
 			for(let intI = 1; intI < splitPath.length - 1; intI++)
 			{
@@ -458,9 +458,9 @@ export function activate(context: vscode.ExtensionContext) {
 							return;
 						}
 						vscode.window.showWarningMessage(
-							"\"" + splitPath[splitPath.length - 1] + 
+							"\"" + splitPath[splitPath.length - 1] +
 							'\" has not been changed since last save. Compare anyway?', "Yes", "No")
-							.then((answer, docPath : string = verifyIsString(fileName), document = doc) => 
+							.then((answer, docPath : string = verifyIsString(fileName), document = doc) =>
 							{
 								if(answer === "Yes" && document !== undefined)
 								{
@@ -518,8 +518,8 @@ export function activate(context: vscode.ExtensionContext) {
 				compareWithSaveHelper(aPath, aEditor);
 			}else
 			{
-				vscode.window.showWarningMessage("\"" + path.basename(a.path) + 
-				'\" has not been changed since last save. Compare anyway?', "Yes", "No").then(answer => 
+				vscode.window.showWarningMessage("\"" + path.basename(a.path) +
+				'\" has not been changed since last save. Compare anyway?', "Yes", "No").then(answer =>
 				{
 					if(answer === "Yes" && aEditor !== undefined)
 					{
@@ -572,7 +572,7 @@ export function activate(context: vscode.ExtensionContext) {
 		let selectedText = vscode.window.activeTextEditor.document.getText(selection);
 
 		let uri : vscode.Uri;
-		
+
 		try
 		{
 			uri = await createRandomFile(selectedText);
@@ -598,7 +598,7 @@ export function activate(context: vscode.ExtensionContext) {
 		clearLeftPath();
 	});
 
-	registerCommand('.gitCompare', async (a) => 
+	registerCommand('.gitCompare', async (a) =>
 	{
 		if(a.type === undefined)
 		{
@@ -635,7 +635,7 @@ export function activate(context: vscode.ExtensionContext) {
 				let case0Staged: string | false = await gitCompareHelper(a.resourceUri.fsPath, ":./");
 				let case0Head: string | false = await gitCompareHelper(a.resourceUri.fsPath, "HEAD:./");
 
-				
+
 				let compareTarget = await vscode.window.showQuickPick(["Compare to head","Compare to current version"], {placeHolder: 'Compare to what?'});
 
 				if(compareTarget === undefined)
@@ -720,7 +720,7 @@ export function activate(context: vscode.ExtensionContext) {
 				options += " -lro";
 				fileLabel = verifyIsString(a.fsPath);
 			}
-			
+
 		}else if(!vscode.window.activeTextEditor)
 		{
 			//Error no active text editor
@@ -764,7 +764,7 @@ export function activate(context: vscode.ExtensionContext) {
 		let selectedText = vscode.window.activeTextEditor.document.getText(selection);
 
 		let uri : vscode.Uri;
-		
+
 		try
 		{
 			uri = await createRandomFile(selectedText);
@@ -794,7 +794,7 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
-	registerCommand('.launchBC', () => 
+	registerCommand('.launchBC', () =>
 	{
 		openBC("",[]);
 	});
@@ -831,7 +831,7 @@ export function activate(context: vscode.ExtensionContext) {
 			{
 				let options = "";
 				if((items[0].scheme !== "file" || items[1].scheme !== "file"))//If an item is not a regular file
-				{	
+				{
 					if(!leftIsFile)//No folders
 					{
 						vscode.window.showErrorMessage("The comparison of non-local folders is not currently supported");
@@ -851,9 +851,9 @@ export function activate(context: vscode.ExtensionContext) {
 						}
 					}
 				}
-				
+
 				openBC(options, ["",""], fileLeft, fileRight);
-				
+
 			}else
 			{
 				//Error: Can't compare files to directories
@@ -891,7 +891,7 @@ export function activate(context: vscode.ExtensionContext) {
 		let textContent = editor.getText();
 
 		let uri : vscode.Uri;
-		
+
 		try
 		{
 			uri = await createRandomFile(textContent, path.extname(filePath));
@@ -913,7 +913,7 @@ export function activate(context: vscode.ExtensionContext) {
 		let fileName = path.basename(strPath);
 		let filePath: string | false = false;
 
-		await simpleGit(directory).outputHandler((_command: any, standardOut: any) => 
+		await simpleGit(directory).outputHandler((_command: any, standardOut: any) =>
 		{
 			filePath = path.join(os.tmpdir(), rndName() + path.extname(strPath));
 			const writeStream = fs.createWriteStream(filePath);
@@ -953,74 +953,57 @@ export function activate(context: vscode.ExtensionContext) {
 		{
 			return false;
 		}
-		
+
 		let returnPath = uri.fsPath;
 		temporaryFiles.push(returnPath);
 
 		return returnPath;
 	}
 
-	function bcPath() : string
-	{
-		if(BCPath === "bcomp")
-		{
-			if(strOS === "linux")
-			{
-				return "bcompare";
+	function checkEnv() {
+		const paths = process.env.PATH.split(path.delimiter);
+		for (const dir of paths) {
+			const filePath = path.join(dir, "bcomp.exe");
+			if (fs_1.default.existsSync(filePath)) {
+				BCPath = filePath;
+				return true;
 			}
-			else
-			{
-				return BCPath;
-			}
-		}else
-		{
-			return "\"" + BCPath + "\"";
 		}
+		return false;
 	}
 
-	function readRegistry() : void
-	{
-		if(strOS === 'win32')
-		{
-			let topFolders: any[] = ['HKEY_CURRENT_USER', 'HKEY_LOCAL_MACHINE'];
-			let versionNumbers = ['', ' 5', ' 4',' 3'];
-			for(var folder in topFolders)
-			{
-				if(BCPath !== 'bcomp')
-				{
-					break;
-				}
-				for(var version in versionNumbers)
-				{
-					const bcRegistryFolder = "SOFTWARE\\Scooter Software\\Beyond Compare";
-					if(BCPath === 'bcomp')
-					{
-						try
-						{
-							BCPath = vsWinReg.GetStringRegKey(
-								topFolders[folder], bcRegistryFolder + versionNumbers[version], 'ExePath');
-							if(BCPath === undefined || BCPath === '')//if not found, reset to default
-							{
-								BCPath = 'bcomp';
-							}else
-							{
-								BCPath = BCPath.replace("BCompare.exe", "BComp.exe");
-								break;
-							}
-							
-						}catch
-						{
-							BCPath = 'bcomp';
-						}
+	function checkReg() {
+		const bcRegistryFolder = "SOFTWARE\\Scooter Software\\Beyond Compare";
+		const topFolders = ['HKEY_CURRENT_USER', 'HKEY_LOCAL_MACHINE'];
+		const versionNumbers = ['', ' 5', ' 4', ' 3'];
+		let tempPath = "";
+		for (var folder in topFolders) {
+			for (var version in versionNumbers) {
+				try {
+					tempPath = vsWinReg.GetStringRegKey(topFolders[folder], bcRegistryFolder + versionNumbers[version], 'ExePath');
+					if (tempPath && tempPath !== '') {
+						BCPath = tempPath.replace("BCompare.exe", "BComp.exe");
+						return true;
 					}
-				}
+				} catch (error) { }
 			}
+		}
+		return false;
+	}
+
+	function getBcPath() {
+		if (strOS === 'win32') {
+			if (!checkEnv()) {
+				checkReg();
+			}
+		} else if (strOS === "linux") {
+			BCPath = "bcompare";
 		}
 	}
 
 	async function openBC(options: string = "", names : string[], ...files: string[])
 	{
-		readRegistry();//Update path to BC (if on windows)
+		getBcPath(); //Update path to BC (if on windows or linux)
 
 		if(files.length > 4 || files.length > names.length)//Shouldn't ever be true
 		{
@@ -1029,7 +1012,7 @@ export function activate(context: vscode.ExtensionContext) {
 			return;
 		}
 
-		let cmd = bcPath() + " ";
+		let cmd = BCPath + " ";
 
 		for(var file in files)
 		{
@@ -1048,7 +1031,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 		//Clear left file/folder
 
-		exec(cmd, (error,stdout,stderr) => 
+		exec(cmd, (error,stdout,stderr) =>
 		{
 			if(error !== null)
 			{
@@ -1063,7 +1046,7 @@ export function activate(context: vscode.ExtensionContext) {
 					}
 				}
 			}
-			
+
 			files.forEach(file =>{
 				deleteFileIfTemp(file);
 			});
@@ -1079,7 +1062,7 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 		return name;
 	}
-	
+
 	function createRandomFile(contents = '', fileExtension = '.txt'): Thenable<vscode.Uri> {
 		return new Promise((resolve, reject) => {
 			const tmpFile = path.join(os.tmpdir(), rndName() + fileExtension);
@@ -1087,7 +1070,7 @@ export function activate(context: vscode.ExtensionContext) {
 				if (error) {
 					return reject(error);
 				}
-	
+
 				resolve(vscode.Uri.file(tmpFile));
 			});
 		});
@@ -1115,7 +1098,7 @@ export function activate(context: vscode.ExtensionContext) {
 				{
 					let strThreeWayCompareAllowed = vsWinReg.GetStringRegKey(
 						'HKEY_CURRENT_USER', bcRegistryFolder + versionNumbers[version], 'SupportsMerge');
-				
+
 					if(strThreeWayCompareAllowed === '\u0000')
 					{
 						return false;
@@ -1125,7 +1108,7 @@ export function activate(context: vscode.ExtensionContext) {
 					}
 				}catch{}
 			}
-			
+
 			return true;
 		}
 
@@ -1174,7 +1157,7 @@ export function activate(context: vscode.ExtensionContext) {
 	{
 		let oldLeftPath = leftPath;
 		leftPath = strPath;
-		
+
 		if(globalState.get("leftIsPreserved"))//If the current left path is a temp file
 		{
 			let globalLeft = verifyIsString(globalState.get("leftPath"));
@@ -1290,7 +1273,7 @@ export function activate(context: vscode.ExtensionContext) {
 				{
 					openFromDiffHelper2(tabInput.original, leftFilePath);
 				}
-				
+
 				temporaryFiles.push(leftFilePath);
 				options += " -lro";
 				options += " -vcs1" + path.basename(tabInput.original.fsPath);
@@ -1303,7 +1286,7 @@ export function activate(context: vscode.ExtensionContext) {
 			let rightDiskCheck = await isUriSameAsDisk(tabInput.modified);
 			if(rightDiskCheck !== true)
 			{
-				
+
 				rightFilePath = extractExtAndMakeRandomFilePath(tabInput.modified.path);
 
 				try
@@ -1321,7 +1304,7 @@ export function activate(context: vscode.ExtensionContext) {
 				{
 					openFromDiffHelper2(tabInput.modified, rightFilePath);
 				}
-				
+
 				temporaryFiles.push(rightFilePath);
 				options += " -rro";
 				options += " -vcs2" + path.basename(tabInput.modified.fsPath);
@@ -1337,26 +1320,26 @@ export function activate(context: vscode.ExtensionContext) {
 
 	function getLabelForOpenFromDiff(uri : vscode.Uri) : string
 	{
-		let filename = path.basename(uri.fsPath); 
-		let title = filename; 
-		try 
-		{ 
-			if (uri.scheme === 'file') 
-			{ 
-				title = uri.fsPath; 
-			} 
-			else 
-			{ 
-				title = vscode.Uri.from({scheme: uri.scheme, authority: uri.authority, path: uri.path}).toString(true); 
-				if (uri.scheme === 'git') 
-				{ 
-						let gitQuery = JSON.parse(uri.query); 
-						title = title + ' @' + gitQuery.ref; 
-				} 
-			} 
-		} 
-		catch 
-		{ 
+		let filename = path.basename(uri.fsPath);
+		let title = filename;
+		try
+		{
+			if (uri.scheme === 'file')
+			{
+				title = uri.fsPath;
+			}
+			else
+			{
+				title = vscode.Uri.from({scheme: uri.scheme, authority: uri.authority, path: uri.path}).toString(true);
+				if (uri.scheme === 'git')
+				{
+						let gitQuery = JSON.parse(uri.query);
+						title = title + ' @' + gitQuery.ref;
+				}
+			}
+		}
+		catch
+		{
 			title = filename;
 		}
 
@@ -1368,7 +1351,7 @@ export function activate(context: vscode.ExtensionContext) {
 		let visibleEditors = vscode.window.visibleTextEditors;
 		for(let i = 0; i < visibleEditors.length; i++)
 		{
-			if(visibleEditors[i].document.uri.query === uri.query 
+			if(visibleEditors[i].document.uri.query === uri.query
 			&& visibleEditors[i].document.uri.fsPath === uri.fsPath)
 			{
 				let text = visibleEditors[i].document.getText();
@@ -1422,24 +1405,24 @@ export function activate(context: vscode.ExtensionContext) {
 		// let uri2stat = fs.statSync(uri2.fsPath).size;
 		// let uri1stat = (await vscode.workspace.fs.stat(uri1)).size;
 
-		if (fs.statSync(uri2.fsPath).size !== (await vscode.workspace.fs.stat(uri1)).size) 
-		{ 
-			return false; 
+		if (fs.statSync(uri2.fsPath).size !== (await vscode.workspace.fs.stat(uri1)).size)
+		{
+			return false;
 		}
 
-		const editorContent = await vscode.workspace.fs.readFile(uri1); 
+		const editorContent = await vscode.workspace.fs.readFile(uri1);
 		const diskContent = await vscode.workspace.fs.readFile(uri2);
 		if(editorContent.length !== diskContent.length)
 		{
 			return editorContent;
 		}
-		
-		for (let i = 0; i < editorContent.length; i++) 
-		{ 
-			if (editorContent[i] !== diskContent[i]) 
-			{ 
-				return editorContent; 
-			} 
+
+		for (let i = 0; i < editorContent.length; i++)
+		{
+			if (editorContent[i] !== diskContent[i])
+			{
+				return editorContent;
+			}
 		}
 		return true;
 	}
